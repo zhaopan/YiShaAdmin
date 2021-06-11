@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Data;
 using System.Data.Common;
 using Microsoft.Data.SqlClient;
+using MySqlConnector;
 using Oracle.ManagedDataAccess.Client;
-using MySql.Data.MySqlClient;
 
 namespace YiSha.Data
 {
@@ -16,7 +15,20 @@ namespace YiSha.Data
         /// <returns></returns>
         public static DbParameter CreateDbParameter()
         {
-            return new SqlParameter();
+            switch (DbHelper.DbType)
+            {
+                case DatabaseType.SqlServer:
+                    return new SqlParameter();
+
+                case DatabaseType.MySql:
+                    return new MySqlParameter();
+
+                case DatabaseType.Oracle:
+                    return new OracleParameter();
+
+                default:
+                    throw new Exception("数据库类型目前不支持！");
+            }
         }
 
         /// <summary>
